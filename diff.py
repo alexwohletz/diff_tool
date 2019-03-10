@@ -75,7 +75,7 @@ class Diff:
                     value_OLD = df_OLD.loc[row,col]
                     value_NEW = df_NEW.loc[row,col]
                     if value_OLD==value_NEW: 
-                        dfDiff.loc[row,col] = df_NEW.loc[row,col]
+                        dfDiff.loc[row,col] = f'{value_NEW} = {value_OLD}'
                     else:
                         dfDiff.loc[row,col] = ('{}→{}').format(value_OLD,value_NEW)
                         diffRows.append(row)
@@ -128,8 +128,8 @@ class Diff:
         cur_fmt = workbook.add_format({'align': 'center', 'num_format': '$#,##0.00'})
         perc_fmt = workbook.add_format({'align': 'center', 'num_format': '0%'})
         grey_fmt = workbook.add_format({'font_color': '#E0E0E0'})
-        highlight_fmt = workbook.add_format({'font_color': '#FF0000', 'bg_color':'#B1B3B3'})
-        new_fmt = workbook.add_format({'font_color': '#32CD32','bold':True})
+        highlight_fmt = workbook.add_format({'font_color': '#FF9000', 'bg_color':'#B1B3B3'})
+        new_fmt = workbook.add_format({'font_color': '#30CD30','bold':True})
 
         # set format over range
         ## highlight changed cells

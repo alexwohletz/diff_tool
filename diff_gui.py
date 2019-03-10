@@ -1,34 +1,6 @@
 import PySimpleGUI as sg
-import pandas as pd
-from pathlib import Path
 from diff import Diff
-
-class Reader:
-
-    def __init__(self,file_path):
-        self.file_path = file_path
-        self.columns = ''
-    
-    def read_files(self):
-
-        file_dict = {'.csv':pd.read_csv,'.xlsx': pd.read_excel,'.txt':pd.read_csv}
-        
-        p = Path(self.file_path)
-        print(f"Reading from {p.suffix} file.")
-
-        if p.is_file():
-            try:
-                df = file_dict[p.suffix](p)
-                self.columns = list(df.columns)
-                return df
-            except KeyError as err:
-                print("Invalid file type selected,",p.suffix)
-
-            except IOError as err:
-                print('File could not be read.',err)
-        else:
-            print("Not a file")
-
+from reader import Reader
 
 layout = [[sg.Text('File New:'), sg.InputText('',size=(10,1)),sg.FileBrowse(button_text='Browse',key = 'file_new')],
           [sg.Text('File Old:'), sg.InputText('',size=(10,1)),sg.FileBrowse(button_text='Browse',key = 'file_old')],
@@ -54,13 +26,14 @@ while True:                 # Event Loop
       else:
         window.FindElement('ucols').Update(values = shared)
         window.FindElement('index').Update(values = list(shared))
+        ucols = values['ucols']
 
   if event == 'Submit':
 
-    diff_rept =  Diff(new,old,values['index'],'diff_report',values['ucols'])
+    diff_rept =  Diff(new,old,values['index'],'diff_report')
 
     try:
-        diff_rept.dataframe_diff()
+        diff_rept.dataframe_diff(useful_cols=ucols)
     except Exception as err:
         print("something went wrong", err)
 
